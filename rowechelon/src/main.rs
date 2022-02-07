@@ -16,7 +16,17 @@ fn main() {
         .build();
 
     application.connect_activate(|app| {
-        
+        // Load CSS from ./style/style.css for now
+        let provider = gtk::CssProvider::new();
+        let style = include_bytes!("style/style.css");
+        provider.load_from_data(style).expect("Failed to load CSS");
+
+        gtk::StyleContext::add_provider_for_screen(
+            &gtk::gdk::Screen::default().expect("Error initializing gtk css provider"),
+            &provider,
+            gtk::STYLE_PROVIDER_PRIORITY_APPLICATION,
+        );
+
         let window = ApplicationWindow::builder()
             .application(app)
             .title("RowEchelon")
@@ -60,14 +70,23 @@ fn main() {
         let centrebutton = gtk::Button::with_label("J");
         centrebutton.set_size_request(48, 48);
         centrebutton.set_margin(1);
-        centrebutton.set_halign(gtk::Align::Center); 
-        //centrebutton.set_margin_start(30); 
-        
+        centrebutton.set_halign(gtk::Align::Center);
+        // Can add markup to tooltips?!
+        centrebutton.set_tooltip_markup(Some(
+            "<span foreground=\"#AABBCC\" size=\"x-large\">Join?</span>",
+        ));
+        //centrebutton.set_margin_start(30);
+
+        // Join button
         let endbutton = gtk::Button::with_label("+");
         endbutton.set_size_request(48, 48);
         endbutton.set_margin(1);
-        endbutton.set_margin_end(30); 
-        endbutton.set_halign(gtk::Align::End); 
+        endbutton.set_margin_end(30);
+        endbutton.set_halign(gtk::Align::End);
+        // Attempt to add a css id to the button
+        endbutton.set_widget_name("plusbutton");
+        // What about tooltips?
+        endbutton.set_tooltip_text(Some("New Message"));
         bottombox.pack_start(&leftbutton, true, true, 0);
         bottombox.add(&centrebutton);
         bottombox.pack_end(&endbutton, true, true, 0);

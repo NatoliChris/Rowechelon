@@ -1,0 +1,4 @@
+#plusbutton {
+  color: white;
+  background-image: -gtk-gradient (linear, 0 0, 1 0, color-stop(0, #77dd77), color-stop(1, #77dd77));
+}
