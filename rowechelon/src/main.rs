@@ -3,7 +3,7 @@ mod entity;
 use gtk::prelude::*;
 use gtk::{
     Application,
-    ApplicationWindow, 
+    ApplicationWindow,
     TreeView,
     TreeStore
 };
@@ -35,14 +35,14 @@ fn main() {
             .build();
 
         window.set_position(gtk::WindowPosition::Center);
-        
-        let topbox = gtk::Box::new(gtk::Orientation::Horizontal, 3); 
+
+        let topbox = gtk::Box::new(gtk::Orientation::Horizontal, 3);
         let bottombox = gtk::Box::new(gtk:: Orientation::Horizontal, 3);
         let button = gtk::Button::with_label("A");
         button.set_size_request(48, 48);
         button.set_margin_bottom(0);
         button.set_border_width(0);
-        
+
         let searchbar = gtk::SearchBar::new();
         searchbar.set_search_mode(true);
         searchbar.set_search_mode_enabled(true);
@@ -64,7 +64,7 @@ fn main() {
         leftbutton.set_size_request(48, 48);
         leftbutton.set_margin(1);
         //leftbutton.set_hexpand(true);
-        leftbutton.set_margin_start(30); 
+        leftbutton.set_margin_start(30);
         leftbutton.set_halign(gtk::Align::Start);
 
         let centrebutton = gtk::Button::with_label("J");
@@ -95,7 +95,7 @@ fn main() {
         let treestore = TreeStore::new(&[String::static_type(),
             String::static_type()]);
         treeview.set_model(Some(&treestore));
-        
+
         endbutton.connect_clicked(|_| {
             let window = gtk::Window::new(gtk::WindowType::Toplevel);
             window.set_title("ChatWindow");
@@ -109,7 +109,7 @@ fn main() {
 
             let header_text = gtk::Label::new(Some("Header"));
             let topic_text = gtk::Label::new(Some("Topic"));
-            
+
             //Hahaha what is this hack...
             topic_text.set_markup("<small>Topic</small>");
 
@@ -117,19 +117,19 @@ fn main() {
             headerbox.add(&topic_text);
 
             main_box.set_expand(true);
-           
+
 
             let textview = gtk::TextView::new();
             main_box.add(&textview);
-            
+
             textview.set_cursor_visible(false);
             textview.set_editable(false);
             textview.set_hexpand(true);
 
-            
+
             let responseview = gtk::TextView::new();
             response_box.add(&responseview);
-            
+
             responseview.set_hexpand(true);
             let sendbtn = gtk::Button::with_label(">");
             sendbtn.set_size_request(48, 48);
@@ -144,25 +144,25 @@ fn main() {
         });
 
 
-            
-        let iter = treestore.insert_with_values(None, None, 
-                                     &[(0, &"One"), 
+
+        let iter = treestore.insert_with_values(None, None,
+                                     &[(0, &"One"),
                                      (1, &"A")]);
-        treestore.insert_with_values(Some(&iter), None, 
+        treestore.insert_with_values(Some(&iter), None,
                                      &[(0, &"Test")]);
-        treestore.insert_with_values(None, None, 
+        treestore.insert_with_values(None, None,
                                      &[(0, &"Two"), (1, &"A")]);
         let beg = treestore.iter_first().unwrap();
         treestore.iter_next(&beg); //Allows us to navigate
         treestore.insert_with_values(Some(&beg), None, &[(0, &"Three")]);
-        treestore.insert_with_values(Some(&beg), None, &[(0, &"Four")]); 
+        treestore.insert_with_values(Some(&beg), None, &[(0, &"Four")]);
 
         let layout = gtk::Box::new(gtk::Orientation::Vertical, 3);
         let column = gtk::TreeViewColumn::new();
-        
+
         layout.add(&topbox);
         layout.add(&treeview);
-        layout.add(&bottombox); 
+        layout.add(&bottombox);
         treeview.set_headers_visible(false);
         column.set_clickable(true);
 
@@ -182,9 +182,47 @@ fn main() {
         treeview.set_expand(true);
         treeview.append_column(&column);
         treeview.append_column(&c2);
-                
-        window.add(&layout);
-        window.show_all();  
+
+        // ----------------------------------------
+        // Login Window Design
+        // ----------------------------------------
+
+        // TODO connect up the window using actions.
+
+        let login_layout = gtk::Box::new(gtk::Orientation::Vertical, 2);
+
+        //  => Title label
+        let title_info_box = gtk::Box::new(gtk::Orientation::Vertical, 1);
+        let login_label = gtk::Label::new(Some("Login"));
+        login_label.set_margin_top(50);
+        login_label.set_xalign(0.5);
+        title_info_box.add(&login_label);
+
+
+        // => User Details (username, password, login button)
+        let user_details_box = gtk::Box::new(gtk::Orientation::Vertical, 3);
+        user_details_box.set_margin_top(20);
+        let username_entry = gtk::Entry::new();
+        username_entry.set_placeholder_text(Some("username"));
+        let password_entry = gtk::Entry::new();
+        password_entry.set_placeholder_text(Some("password"));
+        password_entry.set_visibility(false);
+        password_entry.set_invisible_char(Some('*'));
+        let login_button = gtk::Button::with_label("Login");
+        login_button.set_margin_top(10);
+
+        user_details_box.add(&username_entry);
+        user_details_box.add(&password_entry);
+        user_details_box.add(&login_button);
+
+        // Add widgets to layouts
+        login_layout.add(&title_info_box);
+        login_layout.add(&user_details_box);
+
+
+        // window.add(&layout);
+        window.add(&login_layout);
+        window.show_all();
 
     });
 
