@@ -16,10 +16,16 @@ enum GroupType {
 }
 
 
+///
+///The following is the group which contains
+///associated rooms within this group.
+///
+///Group is reflective of both spaces and logical channel groups
+///that the user wants.
+///
 struct Group {
     spaces_id: Option<String>,
     name: String,
     group_type: GroupType,
     rooms: Vec<Room>
-    
 }

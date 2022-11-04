@@ -1,4 +1,7 @@
 mod entity;
+mod ui;
+
+
 
 use gtk::prelude::*;
 use gtk::{
